@@ -1,4 +1,4 @@
-package xyz.iono.craftbench;
+package xyz.iono.craftbench.main;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
