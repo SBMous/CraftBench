@@ -1,0 +1,9 @@
+main: xyz.iono.craftbench
+name: CraftBench
+version: 1.0-SNAPSHOT
+authors: [SBMous, Holly]
+api-version: 1.16.4
+
+commands:
+  cb:
+    description: CraftBench Command

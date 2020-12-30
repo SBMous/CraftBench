@@ -24,16 +24,27 @@ public class CraftBenchCmd implements CommandExecutor {
 
                 // Help Msg
                 if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-                    //help text
+                    // 2 Edit
+                    sendMsg(commandSender, "&3----- &bCraftBench Help &3-----");
+                    sendMsg(commandSender, "&e/cb &7- &fshows help message");
+                    return true;
                 }
 
                 // Queue Tests
                 else if (args[0].equalsIgnoreCase("q")) {
-                    if (args[1].equalsIgnoreCase("all")) {
-                        // q all
+                    if (args.length == 1) {
+                        commandSender.sendMessage(ChatColor.RED + "No arguments for q command provided\n"+
+                                "Usage: /cb q <test name>\n"+
+                                "Or:    /cb q all\n"+
+                                "For more detail see /cb help");
+                        return false;
+                    }
+                    else if (args[1].equalsIgnoreCase("all")) {
+                        return qAllTests(); // queues all tests
                     }
                     else {
-                        // /q test
+                        // Searches for test then queues test if found else sends error message
+                        return qTest(args[1], commandSender);
                     }
 
                 }
@@ -41,18 +52,68 @@ public class CraftBenchCmd implements CommandExecutor {
                 // Run Tests
                 else if (args[0].equalsIgnoreCase("run")) {
 
+                    //Run all
+                    if (args.length >= 2 && args[1].equalsIgnoreCase("all")) {
+
+                        // Queues all tests to be run
+                        if (!qAllTests()) {
+                            return false;
+                        }
+                    }
+
+                    // Run Specified (logic - if the command is not to run the queue then run specified)
+                    else if (!(args.length == 1 || args[1].equalsIgnoreCase("q"))) {
+
+                        // If test exists then clear queue and add specified test
+                        if (CraftBench.tests.containsKey(args[1])) {
+                            CraftBench.tests.clear();
+                            qTest(args[1], commandSender);
+                        }
+                        else {
+                            commandSender.sendMessage(ChatColor.RED + "Invalid test name '"+args[1]+"'");
+                            return false;
+                        }
+                    }
+
+                    // Run queue
+                    //CraftBench.testQ.forEach(test -> CraftBench.testResults.add(test.runTest()));
+
                 }
 
                 // Unrecognised
                 else {
-                    commandSender.sendMessage("Unrecognised command");
+                    commandSender.sendMessage(ChatColor.RED + "Unrecognised command");
                     return false;
                 }
-
-                return true;
             }
             commandSender.sendMessage(ChatColor.DARK_RED + "You do not have access to this command");
         }
         return false;
     }
+
+    // Queues all tests in map
+    public static boolean qAllTests() {
+        CraftBench.testQ.clear();
+        CraftBench.tests.forEach((key, value) -> CraftBench.testQ.add(value));
+        return true;
+    }
+
+    // Queues test (true) or returns false
+    public static boolean qTest(String alias, CommandSender commandSender) {
+        // Searches for test then queues test if found
+        if (CraftBench.tests.containsKey(alias)) {
+            CraftBench.testQ.add(CraftBench.tests.get(alias));
+            return true;
+        }
+        else {
+            commandSender.sendMessage(ChatColor.RED + "Invalid test name '"+alias+"'");
+            return false;
+        }
+    }
+
+    public static void sendMsg(CommandSender sender, String message) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+
 }
