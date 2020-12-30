@@ -6,7 +6,9 @@ public final class CraftBench extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    // Plugin startup logic
+
+    // get Command
+    getCommand("cb").setExecutor(new CraftBenchCmd());
 
   }
 
