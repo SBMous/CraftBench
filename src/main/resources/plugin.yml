@@ -1,0 +1,7 @@
+name: CraftBench
+version: ${project.version}
+main: xyz.iono.craftbench.Craftbench
+api-version: 1.16
+authors: [SBMous, Holly]
+description: A plugin to benchmark mincraft servers
+website: iono.xyz
