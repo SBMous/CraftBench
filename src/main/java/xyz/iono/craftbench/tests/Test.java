@@ -1,17 +1,19 @@
 package xyz.iono.craftbench.tests;
 
+import xyz.iono.craftbench.util.RegionManager;
+
 public interface Test {
     // Server Interaction
-    void setup();
-    void run();
+    void setup(); // Possible Deprecation
+    void run(RegionManager regionManager);
     void cleanup();
 
     // Results Interaction
     boolean isComplete();
     int getStandardisedScore();
-    int getRuntimeMs();
+    float getRuntimeMs();
+    void setRuntimeMs(long runtimeMs);
 
-    // void getResults(); // Needs return type
-    int getTestId();
+    void outputVerboseResults();
 }
 

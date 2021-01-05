@@ -1,12 +1,18 @@
-package xyz.iono.craftbench.main;
+package xyz.iono.craftbench.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.jetbrains.annotations.NotNull;
+import xyz.iono.craftbench.CraftBench;
 
 public class CraftBenchCmd implements CommandExecutor {
+    protected final CraftBench craftBench;
 
+    public CraftBenchCmd(CraftBench craftBench) { this.craftBench = craftBench; }
     /*
     Command List:
     /cb | /cb help - help
@@ -18,10 +24,9 @@ public class CraftBenchCmd implements CommandExecutor {
      */
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String cmdTxt, String[] args) {
-        if (cmdTxt.equalsIgnoreCase("cb")) {
-            if (commandSender.isOp()) {
-
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String cmdTxt, @NotNull String[] args) {
+        if (commandSender instanceof ConsoleCommandSender) {
+            if (cmdTxt.equalsIgnoreCase("cb")) {
                 // Help Msg
                 if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
                     // 2 Edit
@@ -80,12 +85,13 @@ public class CraftBenchCmd implements CommandExecutor {
 
                 }
 
-                // Unrecognised
+                // Unrecognised Command
                 else {
                     commandSender.sendMessage(ChatColor.RED + "Unrecognised command");
                     return false;
                 }
             }
+        } else {
             commandSender.sendMessage(ChatColor.DARK_RED + "You do not have access to this command");
         }
         return false;
@@ -112,7 +118,7 @@ public class CraftBenchCmd implements CommandExecutor {
     }
 
     public static void sendMsg(CommandSender sender, String message) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        Bukkit.getLogger().info(ChatColor.translateAlternateColorCodes('&', message));
     }
 
 
